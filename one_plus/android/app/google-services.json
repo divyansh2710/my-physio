@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "424405929708",
+    "firebase_url": "https://my-physio-9a20e-default-rtdb.firebaseio.com",
+    "project_id": "my-physio-9a20e",
+    "storage_bucket": "my-physio-9a20e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:424405929708:android:2c1c270cc8e640e36e5fc9",
+        "android_client_info": {
+          "package_name": "com.example.one_plus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "424405929708-8epo5ted7v5tqk1405kl8io6ic59puh2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5G8OmVZHWmysyMooivV6yP9T19bdpux4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "424405929708-8epo5ted7v5tqk1405kl8io6ic59puh2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
