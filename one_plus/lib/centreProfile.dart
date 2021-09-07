@@ -1,0 +1,258 @@
+import 'package:flutter/material.dart';
+
+import 'package:flutter/rendering.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+
+import 'package:google_fonts/google_fonts.dart';
+import 'package:my_physio/models/centres.dart';
+import 'package:my_physio/models/doctordetails.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class CentreProfile extends StatefulWidget {
+  final Centres centre;
+
+  const CentreProfile(this.centre) ;
+  @override
+  _CentreProfileState createState() => _CentreProfileState();
+}
+
+class _CentreProfileState extends State<CentreProfile> {
+  _launchCaller(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        // child: StreamBuilder(
+        //   stream: FirebaseFirestore.instance
+        //       .collection('doctors')
+        //       .orderBy('name')
+        //       .startAt([widget.doctor]).endAt(
+        //           [widget.doctor + '\uf8ff']).snapshots(),
+        //   builder:
+        //       (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        //     // if (!snapshot.hasData) {
+        //     //   return Center(
+        //     //     child: CircularProgressIndicator(),
+        //     //   );
+        //     // }
+        //     return NotificationListener<OverscrollIndicatorNotification>(
+        //       onNotification: (OverscrollIndicatorNotification overscroll) {
+        //         overscroll.disallowGlow();
+        //         return;
+        //       },
+              child: ListView.builder(
+                itemCount: 1,
+                itemBuilder: (context, index) {
+                  // DocumentSnapshot document = snapshot.data.docs[index];
+                  return Container(
+                    margin: EdgeInsets.only(top: 5),
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          height: 50,
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.only(left: 5),
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.chevron_left_sharp,
+                              color: Colors.indigo,
+                              size: 30,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ),
+
+                        InkWell(
+                          child: CircleAvatar(
+                                            backgroundImage: AssetImage('assets/map.png'),
+                            //backgroundColor: Colors.lightBlue[100],
+                            radius: 80,
+                          ),
+                          onTap: ()=>{
+                            _launchMapsUrl(widget.centre.lat,widget.centre.long)
+                          },
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          widget.centre.centreName,
+                          style: GoogleFonts.lato(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        // Text(
+                        //   doctors[0].doctorJobTitle,
+                        //   style: GoogleFonts.lato(
+                        //       //fontWeight: FontWeight.bold,
+                        //       fontSize: 18,
+                        //       color: Colors.black54),
+                        // ),
+                        // SizedBox(
+                        //   height: 16,
+                        // ),
+                        // SizedBox(
+                        //   height: 14,
+                        // ),
+                        // Container(
+                        //   padding: EdgeInsets.only(left: 22, right: 22),
+                        //   alignment: Alignment.center,
+                        //   child: Text(
+                        //     doctors[0].doctorDescription,
+                        //     textAlign: TextAlign.center,
+                        //     style: GoogleFonts.lato(
+                        //       fontSize: 14,
+                        //       color: Colors.black54,
+                        //     ),
+                        //   ),
+                        // ),
+                        // SizedBox(
+                        //   height: 20,
+                        // ),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: EdgeInsets.symmetric(horizontal: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: 15,
+                              ),
+                              Icon(Icons.place_outlined),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width / 1.4,
+                                child: Text(
+                                  widget.centre.centreAddress,
+                                  style: GoogleFonts.lato(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height / 12,
+                          margin: EdgeInsets.symmetric(horizontal: 10),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 15,
+                              ),
+                              Icon(FlutterIcons.phone_in_talk_mco),
+                              SizedBox(
+                                width: 11,
+                              ),
+                              TextButton(
+                                onPressed: () =>{
+                                    _launchCaller("tel:" + widget.centre.centreContact)
+                                },
+                                child: Text(
+                                  widget.centre.centreContact,
+                                  style: GoogleFonts.lato(
+                                      fontSize: 16, color: Colors.blue),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 0,
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 10),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 15,
+                              ),
+                              Icon(Icons.access_time_rounded),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Text(
+                                'Open Hours',
+                                style: GoogleFonts.lato(
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 10),
+                          padding: EdgeInsets.only(left: 60),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Today: ',
+                                style: GoogleFonts.lato(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                '9 AM' +
+                                    " - " +
+                                    '7 PM',
+                                style: GoogleFonts.lato(
+                                  fontSize: 17,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 50,
+                        ),
+                        SizedBox(
+                          height: 40,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            )
+        );
+  }
+      void _launchMapsUrl(double lat, double lon) async {
+  final url = 'https://www.google.com/maps/search/?api=1&query=$lat,$lon';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+}
