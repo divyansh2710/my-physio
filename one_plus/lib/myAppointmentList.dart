@@ -2,7 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:my_physio/Providers/appointments.dart';
 import 'package:my_physio/models/AppointmentsData.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyAppointmentList extends StatefulWidget {
   @override
@@ -10,6 +13,8 @@ class MyAppointmentList extends StatefulWidget {
 }
 
 class _MyAppointmentListState extends State<MyAppointmentList> {
+    var _isInit = true;
+  var _isLoading = false;
   // FirebaseAuth _auth = FirebaseAuth.instance;
   // User user;
   // String _documentID;
@@ -17,6 +22,26 @@ class _MyAppointmentListState extends State<MyAppointmentList> {
   // Future<void> _getUser() async {
   //   user = _auth.currentUser;
   // }
+
+    @override
+  void didChangeDependencies() {
+    print('in change dep');
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+        Provider.of<AppointmentsProvider>(context,listen: false).fetchAndSetAppointments().then((_) {
+       
+
+        setState(() {
+          _isLoading = false;
+
+      });
+       });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
 
   Future<void>? deleteAppointment(String docID) {
     // return FirebaseFirestore.instance
@@ -102,21 +127,17 @@ class _MyAppointmentListState extends State<MyAppointmentList> {
 
   @override
   Widget build(BuildContext context) {
+  _launchCaller(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+print('in widget ');
+    final appointmentsData = Provider.of<AppointmentsProvider>(context,listen: false);
     return SafeArea(
-      // child: StreamBuilder(
-      //   stream: FirebaseFirestore.instance
-      //       .collection('appointments')
-      //       .doc(user.email.toString())
-      //       .collection('pending')
-      //       .orderBy('date')
-      //       .snapshots(),
-        //builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          // if (!snapshot.hasData) {
-          //   return Center(
-          //     child: CircularProgressIndicator(),
-          //   );
-          // }
-          child: appointmetns.length == 0
+          child: appointmentsData.appointments.length == 0
               ? Center(
                   child: Text(
                     'No Appointment Scheduled',
@@ -130,13 +151,13 @@ class _MyAppointmentListState extends State<MyAppointmentList> {
                   scrollDirection: Axis.vertical,
                   physics: ClampingScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: appointmetns.length,
+                  itemCount: appointmentsData.appointments.length,
                   itemBuilder: (context, index) {
-                    var document = appointmetns[index];
-                    print(_compareDate(document.date.toString()));
-                    if (_checkDiff(document.date)) {
-                      deleteAppointment(document.id);
-                    }
+                    var document = appointmentsData.appointments[index];
+                   // print(_compareDate(document.date.toString()));
+                    // if (_checkDiff(document.date)) {
+                    //   deleteAppointment(document.id);
+                    // }
                     return Card(
                       elevation: 2,
                       child: InkWell(
@@ -148,7 +169,7 @@ class _MyAppointmentListState extends State<MyAppointmentList> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 5),
                                 child: Text(
-                                  document.service,
+                                  document.centre+' ,'+document.city,
                                   style: GoogleFonts.lato(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -156,10 +177,9 @@ class _MyAppointmentListState extends State<MyAppointmentList> {
                                 ),
                               ),
                               Text(
-                                _compareDate(
-                                        document.date.toString())
-                                    ? "TODAY"
-                                    : "",
+                             
+                                        document.date + ' '+ document.time,
+                              
                                 style: GoogleFonts.lato(
                                     color: Colors.green,
                                     fontSize: 18,
@@ -173,8 +193,8 @@ class _MyAppointmentListState extends State<MyAppointmentList> {
                           subtitle: Padding(
                             padding: const EdgeInsets.only(left: 5),
                             child: Text(
-                              _dateFormatter(
-                                  document.date.toString()),
+                             
+                                  document.service,
                               style: GoogleFonts.lato(),
                             ),
                           ),
@@ -191,7 +211,7 @@ class _MyAppointmentListState extends State<MyAppointmentList> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Patient name: " + document.name,
+                                        "Patient name: " + document.patientName,
                                         style: GoogleFonts.lato(
                                           fontSize: 16,
                                         ),
@@ -199,17 +219,26 @@ class _MyAppointmentListState extends State<MyAppointmentList> {
                                       SizedBox(
                                         height: 10,
                                       ),
-                                      Text(
-                                        "Time: " +
-                                            _timeFormatter(
-                                              document.date
+                                                  TextButton(
+                                onPressed: () =>{
+                                    _launchCaller("tel:" + document.mobile)
+                                },
+                                child: Text('Mobile: '+
+                                  document.mobile,
+                                  style: GoogleFonts.lato(
+                                      fontSize: 16, color: Colors.blue),
+                                ),
+                              ),
+                                      // Text(
+                                      //   "Mobile: " +
+                                            
+                                      //         document.mobile,
                                                   
-                                                  .toString(),
-                                            ),
-                                        style: GoogleFonts.lato(
-                                          fontSize: 16,
-                                        ),
-                                      ),
+                                                 
+                                      //   style: GoogleFonts.lato(
+                                      //     fontSize: 16,
+                                      //   ),
+                                      // ),
                                     ],
                                   ),
                                   IconButton(

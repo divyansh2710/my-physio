@@ -2,6 +2,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:my_physio/Providers/Services.dart';
+import 'package:my_physio/Providers/appointments.dart';
 import 'package:my_physio/Providers/centres.dart';
 import 'package:my_physio/Providers/doctors.dart';
 import 'package:my_physio/auth.dart';
@@ -68,6 +69,9 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider.value(
           value: ServicesProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: AppointmentsProvider(),
         ),
         ChangeNotifierProxyProvider<Auth, Appointments>(
           update: (ctx, auth, previousProducts) => Appointments(
