@@ -1,8 +1,12 @@
 import 'dart:math';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:my_physio/auth.dart';
 import 'package:my_physio/models/http_exception.dart';
+import 'package:my_physio/services/databaseService.dart';
 import 'package:provider/provider.dart';
 
 enum AuthMode { Signup, Login }
@@ -88,12 +92,15 @@ class AuthCard extends StatefulWidget {
 class _AuthCardState extends State<AuthCard> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   AuthMode _authMode = AuthMode.Login;
+  DatabaseServices databaseService = DatabaseServices();
   Map<String, String> _authData = {
     'email': '',
     'password': '',
   };
   var _isLoading = false;
   final _passwordController = TextEditingController();
+  TextEditingController _emailController = new TextEditingController();
+  TextEditingController _nameController = new TextEditingController();
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
@@ -123,10 +130,19 @@ class _AuthCardState extends State<AuthCard> {
     });
      try {
     if (_authMode == AuthMode.Login) {
+       setUserName(_emailController.text);
        await Provider.of<Auth>(context,listen:false).login(_authData['email'] as String, _authData['password'] as String);
    
     } else {
     await Provider.of<Auth>(context,listen:false).signup(_authData['email'] as String, _authData['password'] as String);
+
+    Map<String,String> userDetails={
+      "email":_emailController.text,
+      "role": 'Patient',
+      "name": _nameController.text
+    };
+    databaseService.uploadUserDetails(userDetails);
+    sunscribeToNotify('Patient');
     }
     } on HttpException catch (error) {
       var errorMessage = 'Authentication failed';
@@ -184,8 +200,22 @@ class _AuthCardState extends State<AuthCard> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
+                if (_authMode == AuthMode.Signup)
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: InputDecoration(labelText: 'Name'),
+                    keyboardType: TextInputType.name,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Invalid email!';
+                      }
+                      return null;
+                    },
+
+                  ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'E-Mail'),
+                  controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value!.isEmpty || !value.contains('@')) {
@@ -256,4 +286,27 @@ class _AuthCardState extends State<AuthCard> {
       ),
     );
   }
+  void sunscribeToNotify(topic)async{
+    await FirebaseMessaging.instance.subscribeToTopic(topic);
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      AwesomeNotifications().createNotification(
+          content:NotificationContent(
+              id: 1,
+              channelKey: 'key1',
+              title: message.notification?.title,
+              body: message.notification?.body
+          )
+      );
+    });
+  }
+  setUserName (String email) async {
+    await databaseService.getUserByemail(email).then((val) {
+      QuerySnapshot result;
+      result = val;
+     String username = result.docs[0].get("name");
+      String role = result.docs[0].get("role");
+      sunscribeToNotify(role);
+    });
+  }
+
 }

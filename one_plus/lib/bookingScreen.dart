@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:my_physio/Providers/centres.dart';
 import 'package:my_physio/Providers/Services.dart';
+import 'package:my_physio/constants/UrlConstants.dart';
 import 'package:my_physio/models/centres.dart';
 
 class BookingScreen extends StatefulWidget {
@@ -40,6 +43,24 @@ class _BookingScreenState extends State<BookingScreen> {
   // Future<void> _getUser() async {
   //   user = _auth.currentUser;
   // }
+  sendNotification(String name) async{
+    final url = Uri.parse(UrlConstants.PUSH_NOTIFICATION_URL);
+    final body = jsonEncode({
+      "to":"/topics/Doctor",
+      "notification":{
+        "body":name,
+        "title":'New Appointment'
+      }
+    });
+    await http.post(url,
+        headers: {
+          'Content-Type':'application/json',
+          'Authorization':UrlConstants.FCM_SERVER_KEY
+        },
+        body: body
+    );
+
+  }
 
   Future<void> selectDate(BuildContext context) async {
     showDatePicker(
@@ -559,6 +580,7 @@ class _BookingScreenState extends State<BookingScreen> {
                               print(this.selectedCenter);
                               print(this.selectedService);
                              // print(widget.doctor);
+                              sendNotification(_nameController.text);
                               showAlertDialog(context);
                               // _createAppointment();
                             }
