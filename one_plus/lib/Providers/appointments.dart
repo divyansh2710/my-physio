@@ -1,4 +1,5 @@
   import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -26,13 +27,89 @@ class AppointmentsProvider with ChangeNotifier {
     print('inside service');
      final prefs = await SharedPreferences.getInstance();
      final extractedUserData = json.decode(prefs.getString('userData') as String);
+     String role=prefs.getString('userRole') as String;
+     print(role);
      String? _userId = extractedUserData['userId'] as String;
      String currentDate =DateFormat('dd-MM-yyyy').format(DateTime.now()); 
      String tomorrowsDate =DateFormat('dd-MM-yyyy').format(DateTime.now().add(const Duration(days: 1))); 
-     print(currentDate);
-     print(tomorrowsDate);
-     print(_userId);
       final List<AppointmentData> loadedAppointments = [];
+      if(role =='Doctor'){
+    final url = Uri.parse(UrlConstants.FIREBASE_API_URL+'/doctorappointments/'+currentDate+'.json');
+     final url1 = Uri.parse(UrlConstants.FIREBASE_API_URL+'/doctorappointments/'+tomorrowsDate+'.json');
+try {
+      final response = await http.get(url);
+    //  print('b');
+      print(response.body);
+      final extractedData = json.decode(response.body) ;
+      if (extractedData == null) {
+        print('c1');
+      
+      }
+      else{
+      
+      extractedData.forEach((appointmentsData) {
+        loadedAppointments.add(AppointmentData(
+          patientName: appointmentsData['patientName'],
+          description: appointmentsData['description'],
+          city: appointmentsData['city'],
+          centre: appointmentsData['center'],
+          date: appointmentsData['date'],
+          mobile: appointmentsData['mobile'],
+          service:   appointmentsData['service'],
+          time: appointmentsData['time'],
+          id: ''
+          
+        ));
+      });
+  
+      _appointments = loadedAppointments;
+      }
+      //notifyListeners();
+    } catch (error) {
+      print('in error 1');
+      print(error.toString());
+      throw (error);
+    }
+
+
+        try {
+      final response = await http.get(url1);
+      //print('b');
+      print(response.body);
+      final extractedData = json.decode(response.body) ;
+      if (extractedData == null) {
+        print('c2');
+      
+      }
+     
+    else{
+      extractedData.forEach((appointmentsData) {
+        loadedAppointments.add(AppointmentData(
+          patientName: appointmentsData['patientName'],
+          description: appointmentsData['description'],
+          city: appointmentsData['city'],
+          centre: appointmentsData['center'],
+          date: appointmentsData['date'],
+          mobile: appointmentsData['mobile'],
+          service:   appointmentsData['service'],
+          time: appointmentsData['time'],
+          id: ''
+          
+        ));
+      });
+  
+      _appointments = loadedAppointments;
+    }
+      //notifyListeners();
+    } catch (error) {
+      print('in error 1');
+      print(error.toString());
+      throw (error);
+    }
+
+     
+      }
+      else{
     final url = Uri.parse(UrlConstants.FIREBASE_API_URL+'/appointments/'+_userId+'/'+currentDate+'.json');
      final url1 = Uri.parse(UrlConstants.FIREBASE_API_URL+'/appointments/'+_userId+'/'+tomorrowsDate+'.json');
    // print('a');
@@ -46,9 +123,6 @@ class AppointmentsProvider with ChangeNotifier {
       
       }
       else{
-     
-      print(extractedData);
-      print('new'+extractedData[0]);
       
       extractedData.forEach((appointmentsData) {
         loadedAppointments.add(AppointmentData(
@@ -124,7 +198,7 @@ final url3 = Uri.parse(UrlConstants.FIREBASE_API_URL+'/appointments/'+_userId+'.
       }
       else{
 data.forEach((key, value) {
-  print('key='+key);
+
  
   value.forEach((valueData){
     print('ddd');
@@ -152,5 +226,6 @@ print(valueData);
     }
 
     }
+  }
   }
   }

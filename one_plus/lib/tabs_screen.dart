@@ -1,14 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_physio/Providers/centres.dart';
 import 'package:my_physio/Providers/Services.dart';
 import 'package:my_physio/bookingScreen.dart';
 import 'package:my_physio/myAppointmentList.dart';
+import 'package:my_physio/services/databaseService.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class TabsScreen extends StatefulWidget {
     final CentreProvider centreProvider;
   final ServicesProvider servicesProvider;
-  const TabsScreen( this.centreProvider,this.servicesProvider);
+  
+   TabsScreen( this.centreProvider,this.servicesProvider);
   @override
   _TabsScreenState createState() => _TabsScreenState( this.centreProvider,this.servicesProvider);
 
@@ -16,10 +20,26 @@ class TabsScreen extends StatefulWidget {
 }
 
 class _TabsScreenState extends State<TabsScreen> {
+
+
      final CentreProvider centreProvider;
   final ServicesProvider servicesProvider;
+  DatabaseServices databaseService = DatabaseServices();
+  
    List<Map<String, Object>> _pages = [];
-_TabsScreenState(this.centreProvider,this.servicesProvider){
+   
+_TabsScreenState(this.centreProvider,this.servicesProvider) {
+ // setUserName () async {
+   //  final prefs =  await SharedPreferences.getInstance();
+      
+  //  String role = prefs.getString('userRole') as String;
+   // await databaseService.getUserByemail(email).then((val ) async {
+   //   QuerySnapshot result;
+  //    result = val;
+  //   String username = result.docs[0].get("name");
+   //   String role = result.docs[0].get("role");
+      
+  //    if (role=='Patient'){
   _pages=[
     {
       'page': MyAppointmentList(),
@@ -30,8 +50,22 @@ _TabsScreenState(this.centreProvider,this.servicesProvider){
       'title': 'Book Appointment',
     },
   ];
+//}
+//else if(role=='Doctor'){
+ //   _pages=[
+   // {
+ //     'page': MyAppointmentList(),
+//      'title': 'Appointments',
+ //   }
+ // ];
+//}
+      
+      
+ //   });
+//  }
+
+
 }
-  
   int _selectedPageIndex = 0;
 
   void _selectPage(int index) {
@@ -39,6 +73,8 @@ _TabsScreenState(this.centreProvider,this.servicesProvider){
       _selectedPageIndex = index;
     });
   }
+
+
 
   @override
   Widget build(BuildContext context) {

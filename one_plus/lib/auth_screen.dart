@@ -8,6 +8,7 @@ import 'package:my_physio/auth.dart';
 import 'package:my_physio/models/http_exception.dart';
 import 'package:my_physio/services/databaseService.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -130,7 +131,7 @@ class _AuthCardState extends State<AuthCard> {
     });
      try {
     if (_authMode == AuthMode.Login) {
-       setUserName(_emailController.text);
+       setUserName(_emailController.text );
        await Provider.of<Auth>(context,listen:false).login(_authData['email'] as String, _authData['password'] as String);
    
     } else {
@@ -300,13 +301,23 @@ class _AuthCardState extends State<AuthCard> {
     });
   }
   setUserName (String email) async {
-    await databaseService.getUserByemail(email).then((val) {
+    await databaseService.getUserByemail(email).then((val ) async {
       QuerySnapshot result;
       result = val;
      String username = result.docs[0].get("name");
       String role = result.docs[0].get("role");
+      final prefs =  await SharedPreferences.getInstance();
+      prefs.setString('userRole', role);
+      String role2=prefs.getString('userRole') as String;
+      print('user pref'+role2);
       sunscribeToNotify(role);
     });
   }
+
+   setUserRole (String role) async {
+final prefs =  await SharedPreferences.getInstance();
+      prefs.setString('userRole', role);
+      
+   }
 
 }
