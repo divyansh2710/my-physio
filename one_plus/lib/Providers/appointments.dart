@@ -40,23 +40,23 @@ try {
       final response = await http.get(url);
     //  print('b');
       print(response.body);
-      final extractedData = json.decode(response.body) ;
+      final Map<String, dynamic> extractedData = json.decode(response.body);
       if (extractedData == null) {
         print('c1');
       
       }
       else{
       
-      extractedData.forEach((appointmentsData) {
+      extractedData.forEach((key,value) {
         loadedAppointments.add(AppointmentData(
-          patientName: appointmentsData['patientName'],
-          description: appointmentsData['description'],
-          city: appointmentsData['city'],
-          centre: appointmentsData['center'],
-          date: appointmentsData['date'],
-          mobile: appointmentsData['mobile'],
-          service:   appointmentsData['service'],
-          time: appointmentsData['time'],
+          patientName: value['patientName'],
+          description: value['description'],
+          city: value['city'],
+          centre: value['center'],
+          date: value['date'],
+          mobile: value['mobile'],
+          service:   value['service'],
+          time: value['time'],
           id: ''
           
         ));
@@ -76,23 +76,23 @@ try {
       final response = await http.get(url1);
       //print('b');
       print(response.body);
-      final extractedData = json.decode(response.body) ;
+      final Map<String, dynamic> extractedData = json.decode(response.body);
       if (extractedData == null) {
         print('c2');
       
       }
      
     else{
-      extractedData.forEach((appointmentsData) {
+      extractedData.forEach((key,value) {
         loadedAppointments.add(AppointmentData(
-          patientName: appointmentsData['patientName'],
-          description: appointmentsData['description'],
-          city: appointmentsData['city'],
-          centre: appointmentsData['center'],
-          date: appointmentsData['date'],
-          mobile: appointmentsData['mobile'],
-          service:   appointmentsData['service'],
-          time: appointmentsData['time'],
+          patientName: value['patientName'],
+          description: value['description'],
+          city: value['city'],
+          centre: value['center'],
+          date: value['date'],
+          mobile: value['mobile'],
+          service:   value['service'],
+          time: value['time'],
           id: ''
           
         ));
@@ -142,23 +142,24 @@ try {
       //
         extractedData.forEach((key, value) {
 
-
-          value.forEach((valueData){
+       print('aaaaaa');
+       print(value);
+        //  value.forEach((valueData){
             print('ddd');
-            print(valueData);
+           // print(valueData);
             loadedAppointments.add(AppointmentData(
-                patientName: valueData['patientName'],
-                description: valueData['description'],
-                city: valueData['city'],
-                centre: valueData['center'],
-                date: valueData['date'],
-                mobile: valueData['mobile'],
-                service:   valueData['service'],
-                time: valueData['time'],
+                patientName: value['patientName'],
+                description: value['description'],
+                city: value['city'],
+                centre: value['centre'],
+                date: value['date'],
+                mobile: value['mobile'],
+                service:   value['service'],
+                time: value['time'],
                 id: ''
 
             ));
-          });
+        //  });
         });
         _appointments = loadedAppointments;
       //_appointments = loadedAppointments;
@@ -175,23 +176,23 @@ try {
       final response = await http.get(url1);
       //print('b');
       print(response.body);
-      final extractedData = json.decode(response.body) ;
+      final Map<String, dynamic> extractedData = json.decode(response.body);
       if (extractedData == null) {
         print('c2');
       
       }
      
     else{
-      extractedData.forEach((appointmentsData) {
+      extractedData.forEach((key,value) {
         loadedAppointments.add(AppointmentData(
-          patientName: appointmentsData['patientName'],
-          description: appointmentsData['description'],
-          city: appointmentsData['city'],
-          centre: appointmentsData['center'],
-          date: appointmentsData['date'],
-          mobile: appointmentsData['mobile'],
-          service:   appointmentsData['service'],
-          time: appointmentsData['time'],
+          patientName: value['patientName'],
+          description: value['description'],
+          city: value['city'],
+          centre: value['center'],
+          date: value['date'],
+          mobile: value['mobile'],
+          service:   value['service'],
+          time: value['time'],
           id: ''
           
         ));
@@ -223,8 +224,7 @@ data.forEach((key, value) {
 
  
   value.forEach((valueData){
-    print('ddd');
-print(valueData);
+
  loadedAppointments.add(AppointmentData(
            patientName: valueData['patientName'],
            description: valueData['description'],

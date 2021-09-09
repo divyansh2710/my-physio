@@ -169,7 +169,7 @@ print('in widget ');
                               Padding(
                                 padding: const EdgeInsets.only(left: 5),
                                 child: Text(
-                                  document.centre+' ,'+document.city,
+                                  null!=document.centre?document.centre:''+', '+document.city,
                                   style: GoogleFonts.lato(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -178,7 +178,7 @@ print('in widget ');
                               ),
                               Text(
                              
-                                        document.date + ' '+ document.time,
+                                        null!=document.date?document.date:'' + ' '+ document.time,
                               
                                 style: GoogleFonts.lato(
                                     color: Colors.green,
