@@ -117,29 +117,51 @@ try {
       final response = await http.get(url);
     //  print('b');
       print(response.body);
-      final extractedData = json.decode(response.body) ;
+     // final extractedData = json.decode(response.body) ;
+      final Map<String, dynamic> extractedData = json.decode(response.body);
       if (extractedData == null) {
         print('c1');
       
       }
       else{
       
-      extractedData.forEach((appointmentsData) {
-        loadedAppointments.add(AppointmentData(
-          patientName: appointmentsData['patientName'],
-          description: appointmentsData['description'],
-          city: appointmentsData['city'],
-          centre: appointmentsData['center'],
-          date: appointmentsData['date'],
-          mobile: appointmentsData['mobile'],
-          service:   appointmentsData['service'],
-          time: appointmentsData['time'],
-          id: ''
-          
-        ));
-      });
-  
-      _appointments = loadedAppointments;
+      // extractedData.forEach((appointmentsData) {
+      //   loadedAppointments.add(AppointmentData(
+      //     patientName: appointmentsData['patientName'],
+      //     description: appointmentsData['description'],
+      //     city: appointmentsData['city'],
+      //     centre: appointmentsData['center'],
+      //     date: appointmentsData['date'],
+      //     mobile: appointmentsData['mobile'],
+      //     service:   appointmentsData['service'],
+      //     time: appointmentsData['time'],
+      //     id: ''
+      //
+      //   ));
+      // });
+      //
+        extractedData.forEach((key, value) {
+
+
+          value.forEach((valueData){
+            print('ddd');
+            print(valueData);
+            loadedAppointments.add(AppointmentData(
+                patientName: valueData['patientName'],
+                description: valueData['description'],
+                city: valueData['city'],
+                centre: valueData['center'],
+                date: valueData['date'],
+                mobile: valueData['mobile'],
+                service:   valueData['service'],
+                time: valueData['time'],
+                id: ''
+
+            ));
+          });
+        });
+        _appointments = loadedAppointments;
+      //_appointments = loadedAppointments;
       }
       //notifyListeners();
     } catch (error) {

@@ -13,6 +13,8 @@ import 'package:my_physio/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import 'Providers/city.dart';
+
 void main() async{
    WidgetsFlutterBinding.ensureInitialized();
    await Firebase.initializeApp();
@@ -69,6 +71,9 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider.value(
           value: ServicesProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: CityProvider(),
         ),
         ChangeNotifierProvider.value(
           value: AppointmentsProvider(),

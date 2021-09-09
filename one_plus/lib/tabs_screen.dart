@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_physio/Providers/centres.dart';
 import 'package:my_physio/Providers/Services.dart';
+import 'package:my_physio/Providers/city.dart';
 import 'package:my_physio/bookingScreen.dart';
 import 'package:my_physio/myAppointmentList.dart';
 import 'package:my_physio/services/databaseService.dart';
@@ -11,10 +12,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 class TabsScreen extends StatefulWidget {
     final CentreProvider centreProvider;
   final ServicesProvider servicesProvider;
-  
-   TabsScreen( this.centreProvider,this.servicesProvider);
+    final CityProvider cityProvider;
+
+
+    TabsScreen( this.centreProvider,this.servicesProvider, this.cityProvider);
   @override
-  _TabsScreenState createState() => _TabsScreenState( this.centreProvider,this.servicesProvider);
+  _TabsScreenState createState() => _TabsScreenState( this.centreProvider,this.servicesProvider,this.cityProvider);
 
   
 }
@@ -24,11 +27,13 @@ class _TabsScreenState extends State<TabsScreen> {
 
      final CentreProvider centreProvider;
   final ServicesProvider servicesProvider;
+     final CityProvider cityProvider;
+
   DatabaseServices databaseService = DatabaseServices();
   
    List<Map<String, Object>> _pages = [];
    
-_TabsScreenState(this.centreProvider,this.servicesProvider) {
+_TabsScreenState(this.centreProvider,this.servicesProvider, this.cityProvider) {
  // setUserName () async {
    //  final prefs =  await SharedPreferences.getInstance();
       
@@ -46,7 +51,7 @@ _TabsScreenState(this.centreProvider,this.servicesProvider) {
       'title': 'My Appointments',
     },
     {
-      'page': BookingScreen(centreProvider,servicesProvider),
+      'page': BookingScreen(centreProvider,servicesProvider,cityProvider),
       'title': 'Book Appointment',
     },
   ];

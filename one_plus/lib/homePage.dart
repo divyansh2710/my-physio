@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:my_physio/CentreItem.dart';
 import 'package:my_physio/Providers/Services.dart';
 import 'package:my_physio/Providers/centres.dart';
+import 'package:my_physio/Providers/city.dart';
 import 'package:my_physio/Providers/doctors.dart';
 import 'package:my_physio/ServiceItem.dart';
 
@@ -78,6 +79,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
      final centresData = Provider.of<CentreProvider>(context,listen: false);
      final servicesData = Provider.of<ServicesProvider>(context,listen: false);
+     final cityData = Provider.of<CityProvider>(context,listen:false);
      final doctorsData = Provider.of<DoctorProvider>(context,listen: false);
     String _message;
     DateTime now = DateTime.now();
@@ -106,7 +108,7 @@ class _HomePageState extends State<HomePage> {
         onPressed: () => {
                          Navigator.push(context,
                         MaterialPageRoute(builder: (BuildContext context) {
-                        return TabsScreen(centresData,servicesData);
+                        return TabsScreen(centresData,servicesData,cityData);
                       }))
 
 

@@ -6,19 +6,24 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:my_physio/Providers/centres.dart';
 import 'package:my_physio/Providers/Services.dart';
+import 'package:my_physio/Providers/city.dart';
 import 'package:my_physio/constants/UrlConstants.dart';
-import 'package:my_physio/models/centres.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BookingScreen extends StatefulWidget {
   final CentreProvider centres;
   final ServicesProvider services;
+  final CityProvider cities;
 
-  const BookingScreen(this.centres,this.services);
+  const BookingScreen(this.centres,this.services, this.cities);
   @override
   _BookingScreenState createState() => _BookingScreenState();
 }
 
 class _BookingScreenState extends State<BookingScreen> {
+
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
@@ -26,6 +31,7 @@ class _BookingScreenState extends State<BookingScreen> {
   //final TextEditingController _doctorController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
+  final fb = FirebaseDatabase.instance;
 
   FocusNode f1 = FocusNode();
   FocusNode f2 = FocusNode();
@@ -39,17 +45,24 @@ class _BookingScreenState extends State<BookingScreen> {
   String timeText = 'Select Time';
   late String dateUTC;
   late String date_Time;
+  late String _userId;
 
-  // Future<void> _getUser() async {
-  //   user = _auth.currentUser;
-  // }
+  Future<void> fetchAndSetUserId() async {
+    print('inside service');
+    final prefs = await SharedPreferences.getInstance();
+    final extractedUserData = json.decode(
+        prefs.getString('userData') as String);
+    _userId = extractedUserData['userId'] as String;
+   print(_userId);
+  }
   sendNotification(String name) async{
+    createAppointment();
     final url = Uri.parse(UrlConstants.PUSH_NOTIFICATION_URL);
     final body = jsonEncode({
       "to":"/topics/Doctor",
       "notification":{
         "body":name,
-        "title":'New Appointment'
+        "title":'New Appointt'
       }
     });
     await http.post(url,
@@ -61,6 +74,22 @@ class _BookingScreenState extends State<BookingScreen> {
     );
 
   }
+  createAppointment()  {
+    print("started");
+    Map <String,String> appointmentData = {
+      "centre":selectedCenter,
+      "city":selectedCity,
+      "date":_dateController.text,
+      "description":_descriptionController.text,
+      "mobile":_phoneController.text,
+      "patientName":_nameController.text,
+      "service":selectedService,
+      "time":_timeController.text
+    };
+    ref.child("appointments").child(_userId).child(_dateController.text).child(DateTime.now().millisecondsSinceEpoch.toString()).set(appointmentData);
+    ref.child("doctorappointments").child(_dateController.text).child(DateTime.now().millisecondsSinceEpoch.toString()).set(appointmentData);
+}
+
 
   Future<void> selectDate(BuildContext context) async {
     showDatePicker(
@@ -82,6 +111,9 @@ class _BookingScreenState extends State<BookingScreen> {
       },
     );
   }
+  final ref = FirebaseDatabase.instance.reference();
+
+
 
   Future<void> selectTime(BuildContext context) async {
     TimeOfDay? selectedTime = await showTimePicker(
@@ -148,6 +180,7 @@ class _BookingScreenState extends State<BookingScreen> {
   @override
   void initState() {
     super.initState();
+    fetchAndSetUserId();
     Future.delayed(Duration.zero, () {
       //  selectTime(context);
      // _doctorController.text = widget.doctor;
@@ -368,17 +401,19 @@ class _BookingScreenState extends State<BookingScreen> {
                           )),
                         items: widget.services.services.map((value) {
                           return DropdownMenuItem<String>(
-                            value: value.serviceName,
-                            child: new Text(value.serviceName),
+                            value: 'Jaipur',
+                            child: new Text('Jaipur'),
                           );
                         }).toList(),
-                        onChanged: (_) {},
                         hint: Text('Select City',style: TextStyle(
                            color: Colors.black26,
                             fontSize: 18,
                             fontWeight: FontWeight.w800,
                         ),),
+                        onChanged: (element){
+                          selectedCity = element as String;
 
+                        },
                       ),
                       SizedBox(
                         height: 20,
@@ -582,7 +617,6 @@ class _BookingScreenState extends State<BookingScreen> {
                              // print(widget.doctor);
                               sendNotification(_nameController.text);
                               showAlertDialog(context);
-                              // _createAppointment();
                             }
                           },
                           child: Text(
@@ -609,32 +643,5 @@ class _BookingScreenState extends State<BookingScreen> {
     );
   }
 
-  // Future<void> _createAppointment() async {
-  //   print(dateUTC + ' ' + date_Time + ':00');
-  //   FirebaseFirestore.instance
-  //       .collection('appointments')
-  //       .doc(user.email)
-  //       .collection('pending')
-  //       .doc()
-  //       .set({
-  //     'name': _nameController.text,
-  //     'phone': _phoneController.text,
-  //     'description': _descriptionController.text,
-  //     'doctor': _doctorController.text,
-  //     'date': DateTime.parse(dateUTC + ' ' + date_Time + ':00'),
-  //   }, SetOptions(merge: true));
-
-  //   FirebaseFirestore.instance
-  //       .collection('appointments')
-  //       .doc(user.email)
-  //       .collection('all')
-  //       .doc()
-  //       .set({
-  //     'name': _nameController.text,
-  //     'phone': _phoneController.text,
-  //     'description': _descriptionController.text,
-  //     'doctor': _doctorController.text,
-  //     'date': DateTime.parse(dateUTC + ' ' + date_Time + ':00'),
-  //   }, SetOptions(merge: true));
-  // }
+ 
 }
