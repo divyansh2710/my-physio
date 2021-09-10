@@ -4,7 +4,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Expanded(child: Image(image: AssetImage('../assets/myphysio.png'))),
+      body: Image(image: AssetImage('../assets/myphysio.png')),
     );
   }
 }

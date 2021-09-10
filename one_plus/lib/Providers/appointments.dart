@@ -52,7 +52,7 @@ try {
           patientName: value['patientName'],
           description: value['description'],
           city: value['city'],
-          centre: value['center'],
+          centre: value['centre'],
           date: value['date'],
           mobile: value['mobile'],
           service:   value['service'],
@@ -63,6 +63,7 @@ try {
       });
   
       _appointments = loadedAppointments;
+
       }
       //notifyListeners();
     } catch (error) {
@@ -88,7 +89,7 @@ try {
           patientName: value['patientName'],
           description: value['description'],
           city: value['city'],
-          centre: value['center'],
+          centre: value['centre'],
           date: value['date'],
           mobile: value['mobile'],
           service:   value['service'],

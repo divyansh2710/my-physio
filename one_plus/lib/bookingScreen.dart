@@ -61,8 +61,8 @@ class _BookingScreenState extends State<BookingScreen> {
     final body = jsonEncode({
       "to":"/topics/Doctor",
       "notification":{
-        "body":name,
-        "title":'New Appointt'
+        "body":'click to see',
+        "title":'You Have a New Appointment'
       }
     });
     await http.post(url,
@@ -218,9 +218,10 @@ class _BookingScreenState extends State<BookingScreen> {
               Form(
                 key: _formKey,
                 child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  margin: EdgeInsets.symmetric(horizontal: 15),
                   padding: EdgeInsets.only(top: 0),
                   child: Column(
+
                     children: [
                       Container(
                         alignment: Alignment.centerLeft,
@@ -358,7 +359,7 @@ class _BookingScreenState extends State<BookingScreen> {
                             color: Colors.blue),
                         decoration: InputDecoration(
                           contentPadding:
-                              EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                              EdgeInsets.only(left:20, top: 10, bottom: 10),
                           border: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(90.0)),
@@ -399,10 +400,10 @@ class _BookingScreenState extends State<BookingScreen> {
                                 BorderRadius.all(Radius.circular(90.0)),
                             borderSide: const BorderSide(width: 2.0),
                           )),
-                        items: widget.services.services.map((value) {
+                        items: widget.cities.cities.map((value) {
                           return DropdownMenuItem<String>(
-                            value: 'Jaipur',
-                            child: new Text('Jaipur'),
+                            value: value.name,
+                            child: new Text(value.name),
                           );
                         }).toList(),
                         hint: Text('Select City',style: TextStyle(
@@ -425,7 +426,7 @@ class _BookingScreenState extends State<BookingScreen> {
                             color: Colors.blue),
                         decoration: InputDecoration(
                           contentPadding:
-                              EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                              EdgeInsets.only( left:20,top: 10, bottom: 10),
                           border: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(90.0)),
@@ -438,7 +439,7 @@ class _BookingScreenState extends State<BookingScreen> {
                           );
                         }).toList(),
                         onChanged: ( selectedCent) {
-     setState(() {
+                       setState(() {
                 selectedCenter = selectedCent as String;
               });
 

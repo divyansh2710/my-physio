@@ -7,8 +7,7 @@ import 'package:my_physio/models/city.dart';
 
 class CityProvider with ChangeNotifier {
 
-  List<Cities> _city = [
-  ];
+  List<Cities> _city = [];
 
   List<Cities> get cities {
     // if (_showFavoritesOnly) {
@@ -25,11 +24,10 @@ class CityProvider with ChangeNotifier {
         return;
       }
       final List<Cities> loadedCity = [];
-      print(extractedData);
       extractedData.forEach((cities) {
         print('aaa');
         loadedCity.add(
-        cities["name"]
+        Cities(name:cities["name"])
         );
       });
       print('abc');

@@ -32,9 +32,8 @@ void main() async{
    FirebaseMessaging.onBackgroundMessage(_firebasePushhandler);
    FirebaseMessaging.instance.getToken();
    FirebaseMessaging.onMessage.listen((RemoteMessage message){
-       print("1");
      AwesomeNotifications().createNotificationFromJsonData(message.data);
-     print(2);
+     print(message.data);
    }) ;
    FirebaseMessaging.onMessageOpenedApp.listen((message) {
      print('Message clicked!');
@@ -110,7 +109,7 @@ class _MyAppState extends State<MyApp> {
 }
 Future<void> _firebasePushhandler(RemoteMessage message) async{
   await AwesomeNotifications().createNotificationFromJsonData(message.data);
-  print('test');
+  print(message.data);
 }
 
 void Notify(message) async{

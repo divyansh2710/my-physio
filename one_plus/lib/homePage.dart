@@ -54,12 +54,14 @@ class _HomePageState extends State<HomePage> {
         _isLoading = true;
       });
         Provider.of<ServicesProvider>(context,listen: false).fetchAndSetServices().then((_) {
-       
+
       Provider.of<CentreProvider>(context,listen: false).fetchAndSetProducts().then((_) {
        Provider.of<DoctorProvider>(context,listen: false).fetchAndSetDoctors().then((_) {
+      Provider.of<CityProvider>(context,listen: false).fetchAndSetCity().then((_) {
         setState(() {
           _isLoading = false;
         });
+      });
        });
       });
        });
@@ -125,17 +127,20 @@ class _HomePageState extends State<HomePage> {
         title: Container(
           padding: EdgeInsets.only(top: 5),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                //width: MediaQuery.of(context).size.width/1.3,
-                alignment: Alignment.center,
-                child: Text(
-                  _message,
-                  style: GoogleFonts.lato(
-                    color: Colors.black54,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w400,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [ SizedBox(
+              width: 100,
+            ),
+              Center(
+                child: Container(
+                  //width: MediaQuery.of(context).size.width/1.3,
+                  child: Text(
+                    _message,
+                    style: GoogleFonts.lato(
+                      color: Colors.black54,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
@@ -159,7 +164,7 @@ class _HomePageState extends State<HomePage> {
           color: Colors.black,
         ),
       ),
-      body: SafeArea(
+       body: SafeArea(
         child: NotificationListener<OverscrollIndicatorNotification>(
           onNotification: (OverscrollIndicatorNotification overscroll) {
             overscroll.disallowGlow();
@@ -252,7 +257,17 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
                   ),
-                  Container(
+                  _isLoading?Center(
+                      child: Container(
+                        padding: EdgeInsets.all(20),
+                        height:75,
+                        width:75,
+                        child: CircularProgressIndicator(),
+                      ),
+                    ):
+                  Column(
+                    children: [
+                   Container(
                     padding: EdgeInsets.only(left: 23, bottom: 10),
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -297,6 +312,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   CentreItem(centresData)
+                      ])
                 ],
               ),
             ],

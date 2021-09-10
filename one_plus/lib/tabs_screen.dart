@@ -74,9 +74,11 @@ _TabsScreenState(this.centreProvider,this.servicesProvider, this.cityProvider) {
   int _selectedPageIndex = 0;
 
   void _selectPage(int index) {
-    setState(() {
-      _selectedPageIndex = index;
-    });
+    if(mounted){
+      setState(() {
+        _selectedPageIndex = index;
+      });
+    }
   }
 
 

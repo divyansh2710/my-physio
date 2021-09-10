@@ -27,16 +27,18 @@ class _MyAppointmentListState extends State<MyAppointmentList> {
   void didChangeDependencies() {
     print('in change dep');
     if (_isInit) {
-      setState(() {
-        _isLoading = true;
-      });
-        Provider.of<AppointmentsProvider>(context,listen: false).fetchAndSetAppointments().then((_) {
-       
-
+      if(mounted) {
         setState(() {
+          _isLoading = true;
+        });
+      }
+        Provider.of<AppointmentsProvider>(context,listen: false).fetchAndSetAppointments().then((_) {
+          if(mounted)
+         {   setState(() {
+
           _isLoading = false;
 
-      });
+      });}
        });
     }
     _isInit = false;
@@ -136,7 +138,13 @@ class _MyAppointmentListState extends State<MyAppointmentList> {
   }
 print('in widget ');
     final appointmentsData = Provider.of<AppointmentsProvider>(context,listen: false);
-    return SafeArea(
+    return _isLoading?Center(
+        child: Container(
+          height:70,
+          width:70,
+          child: CircularProgressIndicator(),
+        ),
+       ):SafeArea(
           child: appointmentsData.appointments.length == 0
               ? Center(
                   child: Text(
@@ -168,22 +176,26 @@ print('in widget ');
                             children: [
                               Padding(
                                 padding: const EdgeInsets.only(left: 5),
-                                child: Text(
-                                  null!=document.centre?document.centre:''+', '+document.city,
-                                  style: GoogleFonts.lato(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+                                child: Expanded(
+                                  child: Text(
+                                    null!=document.centre?document.centre+","+document.city+" ":document.city+" ",
+                                    style: GoogleFonts.lato(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ),
-                              Text(
+                              Expanded(
+                                child: Text(
                              
-                                        null!=document.date?document.date:'' + ' '+ document.time,
-                              
-                                style: GoogleFonts.lato(
-                                    color: Colors.green,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold),
+                                          null!=document.date?document.date:'' + ' '+ document.time,
+                                
+                                  style: GoogleFonts.lato(
+                                      color: Colors.green,
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                               SizedBox(
                                 width: 0,
