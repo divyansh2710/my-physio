@@ -1,8 +1,11 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:my_physio/Providers/Services.dart';
 import 'package:my_physio/Providers/appointments.dart';
+import 'package:flutter/src/services/binary_messenger.dart';
 import 'package:my_physio/Providers/centres.dart';
 import 'package:my_physio/Providers/doctors.dart';
 import 'package:my_physio/appointmentScreen.dart';
@@ -18,6 +21,13 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'Providers/city.dart';
+
+class GlobalVariable {
+
+  /// This global key is used in material app for navigation through firebase notifications.
+  /// [navState] usage can be found in [notification_notifier.dart] file.
+  static final GlobalKey<NavigatorState> navState = GlobalKey<NavigatorState>();
+}
 
 void main() async{
    WidgetsFlutterBinding.ensureInitialized();
@@ -67,7 +77,18 @@ class _MyAppState extends State<MyApp> {
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
 
-      print('Message clicked!');
+        // Navigator.of(GlobalVariable.navState.currentContext)
+        //     .push(MaterialPageRoute(
+        //     builder: (ctx) => MyAppointmentList()));
+
+        // int _yourId = int.tryParse(message.data["id"]) ?? 0;
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                  MyAppointmentList()
+                ));
+       print('Message clicked!');
     });
 
   }
@@ -76,7 +97,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-  bool adOpen = false;
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
@@ -107,7 +127,11 @@ class _MyAppState extends State<MyApp> {
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
+          navigatorKey: GlobalVariable.navState,
               title: 'MyPhysio',
+            //   routes: {
+            // "appointments": (context)=>MessageHandler(child:MyAppointmentList())
+            //   },
               theme: ThemeData(
                 primarySwatch: Colors.blue,
                 accentColor: Colors.amber
