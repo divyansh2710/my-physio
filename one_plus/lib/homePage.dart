@@ -14,12 +14,15 @@ import 'package:my_physio/Providers/centres.dart';
 import 'package:my_physio/Providers/city.dart';
 import 'package:my_physio/Providers/doctors.dart';
 import 'package:my_physio/ServiceItem.dart';
+import 'package:my_physio/auth.dart';
 
 import 'package:my_physio/carouselSlider.dart';
 
 // import 'package:my_physio/models/centres.dart';
 import 'package:my_physio/tabs_screen.dart';
 import 'package:provider/provider.dart';
+
+import 'auth_screen.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -156,6 +159,20 @@ class _HomePageState extends State<HomePage> {
                   //     context,
                   //     MaterialPageRoute(
                   //         builder: (contex) => NotificationList()));
+                },
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              IconButton(
+                splashRadius: 20,
+                icon: Icon(Icons.power_settings_new_outlined),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (contex) => AuthScreen()));
+                  Auth().logout();
                 },
               ),
             ],

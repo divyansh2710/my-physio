@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:my_physio/auth.dart';
+import 'package:my_physio/homePage.dart';
 import 'package:my_physio/models/http_exception.dart';
 import 'package:my_physio/services/databaseService.dart';
 import 'package:provider/provider.dart';
@@ -168,6 +169,10 @@ class _AuthCardState extends State<AuthCard> {
     setState(() {
       _isLoading = false;
     });
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (contex) => HomePage()));
   }
 
   void _switchAuthMode() {

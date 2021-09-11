@@ -82,12 +82,7 @@ class _MyAppState extends State<MyApp> {
         //     builder: (ctx) => MyAppointmentList()));
 
         // int _yourId = int.tryParse(message.data["id"]) ?? 0;
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                  MyAppointmentList()
-                ));
+        Navigator.pushNamed(context, '/');
        print('Message clicked!');
     });
 
@@ -127,11 +122,8 @@ class _MyAppState extends State<MyApp> {
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
-          navigatorKey: GlobalVariable.navState,
               title: 'MyPhysio',
-            //   routes: {
-            // "appointments": (context)=>MessageHandler(child:MyAppointmentList())
-            //   },
+
               theme: ThemeData(
                 primarySwatch: Colors.blue,
                 accentColor: Colors.amber
