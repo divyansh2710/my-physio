@@ -5,11 +5,15 @@ import 'package:my_physio/Providers/Services.dart';
 import 'package:my_physio/Providers/appointments.dart';
 import 'package:my_physio/Providers/centres.dart';
 import 'package:my_physio/Providers/doctors.dart';
+import 'package:my_physio/appointmentScreen.dart';
 import 'package:my_physio/auth.dart';
 import 'package:my_physio/auth_screen.dart';
+import 'package:my_physio/bookingScreen.dart';
 import 'package:my_physio/constants/Appointments.dart';
 import 'package:my_physio/homePage.dart';
+import 'package:my_physio/myAppointmentList.dart';
 import 'package:my_physio/splash_screen.dart';
+import 'package:my_physio/tabs_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -31,13 +35,7 @@ void main() async{
    );
    FirebaseMessaging.onBackgroundMessage(_firebasePushhandler);
    FirebaseMessaging.instance.getToken();
-   FirebaseMessaging.onMessage.listen((RemoteMessage message){
-     AwesomeNotifications().createNotificationFromJsonData(message.data);
-     print(message.data);
-   }) ;
-   FirebaseMessaging.onMessageOpenedApp.listen((message) {
-     print('Message clicked!');
-   });
+
 
   runApp(MyApp());
 }
@@ -53,10 +51,32 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    FirebaseMessaging.instance.getInitialMessage().then((message){
+  print(message);
+    });
+    FirebaseMessaging.onMessage.listen((RemoteMessage message){
+      // AwesomeNotifications().createNotificationFromJsonData(message.data);
+      AwesomeNotifications().createNotification(content: NotificationContent(
+          id:1,
+          channelKey: 'key1',
+          title: message.notification?.title,
+          body:  message.notification?.body
+      ));
+      print(message.data);
+    }) ;
+
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+
+      print('Message clicked!');
+    });
 
   }
+
+
+
   @override
   Widget build(BuildContext context) {
+  bool adOpen = false;
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
@@ -110,6 +130,10 @@ class _MyAppState extends State<MyApp> {
 Future<void> _firebasePushhandler(RemoteMessage message) async{
   await AwesomeNotifications().createNotificationFromJsonData(message.data);
   print(message.data);
+}
+
+avigate(){
+
 }
 
 void Notify(message) async{

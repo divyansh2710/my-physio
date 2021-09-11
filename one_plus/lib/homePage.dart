@@ -27,6 +27,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController _doctorName = TextEditingController();
 
@@ -105,7 +106,7 @@ class _HomePageState extends State<HomePage> {
       key: _scaffoldKey,
       
       floatingActionButton:FloatingActionButton(
-        
+
         child: Icon(Icons.app_registration_rounded),
         onPressed: () => {
                          Navigator.push(context,
