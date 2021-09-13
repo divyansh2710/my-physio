@@ -164,16 +164,18 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 width: 10,
               ),
-              IconButton(
-                splashRadius: 20,
-                icon: Icon(Icons.power_settings_new_outlined),
-                onPressed: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (contex) => AuthScreen()));
-                  Auth().logout();
-                },
+              Expanded(
+                child: IconButton(
+                  splashRadius: 20,
+                  icon: Icon(Icons.power_settings_new_outlined),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (contex) => AuthScreen()));
+                    Auth().logout();
+                  },
+                ),
               ),
             ],
           ),
