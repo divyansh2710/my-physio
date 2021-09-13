@@ -57,7 +57,9 @@ try {
           mobile: value['mobile'],
           service:   value['service'],
           time: value['time'],
-          id: ''
+            id: '',
+            key:value['key'],
+            shared:value['shared']
           
         ));
       });
@@ -94,7 +96,9 @@ try {
           mobile: value['mobile'],
           service:   value['service'],
           time: value['time'],
-          id: ''
+          id: '',
+            shared:value['shared'],
+            key:value['key']
           
         ));
       });
@@ -157,7 +161,9 @@ try {
                 mobile: value['mobile'],
                 service:   value['service'],
                 time: value['time'],
-                id: ''
+                id: '',
+                shared:value['shared'],
+                key:value['key']
 
             ));
         //  });
@@ -186,15 +192,17 @@ try {
     else{
       extractedData.forEach((key,value) {
         loadedAppointments.add(AppointmentData(
-          patientName: value['patientName'],
-          description: value['description'],
-          city: value['city'],
-          centre: value['center'],
-          date: value['date'],
-          mobile: value['mobile'],
-          service:   value['service'],
-          time: value['time'],
-          id: ''
+            patientName: value['patientName'],
+            description: value['description'],
+            city: value['city'],
+            centre: value['center'],
+            date: value['date'],
+            mobile: value['mobile'],
+            service:   value['service'],
+            time: value['time'],
+            shared:value['shared'],
+            id: '',
+            key:value['key']
           
         ));
       });
@@ -235,7 +243,9 @@ data.forEach((key, value) {
            mobile: valueData['mobile'],
            service:   valueData['service'],
            time: valueData['time'],
-           id: ''
+           id: '',
+     shared:value['shared'],
+           key:value['key']
           
          ));
   });

@@ -1,9 +1,10 @@
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:my_physio/Providers/appointments.dart';
-import 'package:my_physio/models/AppointmentsData.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -44,7 +45,7 @@ class _MyAppointmentListState extends State<MyAppointmentList> {
     _isInit = false;
     super.didChangeDependencies();
   }
-
+   final dbRef = FirebaseDatabase.instance.reference();
   Future<void>? deleteAppointment(String docID) {
     // return FirebaseFirestore.instance
     //     .collection('appointments')
@@ -155,125 +156,147 @@ print('in widget ');
                     ),
                   ),
                 )
-              : ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  physics: ClampingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: appointmentsData.appointments.length,
-                  itemBuilder: (context, index) {
-                    var document = appointmentsData.appointments[index];
-                   // print(_compareDate(document.date.toString()));
-                    // if (_checkDiff(document.date)) {
-                    //   deleteAppointment(document.id);
-                    // }
-                    return Card(
-                      elevation: 2,
-                      child: InkWell(
-                        onTap: () {},
-                        child: ExpansionTile(
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5),
-                                child: Expanded(
-                                  child: Text(
-                                    null!=document.centre?document.centre+","+document.city+" ":document.city+" ",
-                                    style: GoogleFonts.lato(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
+              : Container(
+                 color: Colors.blue,
+                child: ListView.builder(
+
+                    scrollDirection: Axis.vertical,
+                    physics: ClampingScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: appointmentsData.appointments.length,
+                    itemBuilder: (context, index) {
+                      var document = appointmentsData.appointments[index];
+                     // print(_compareDate(document.date.toString()));
+                      // if (_checkDiff(document.date)) {
+                      //   deleteAppointment(document.id);
+                      // }
+                      return Card(
+                        color:document.shared == 'true'? Colors.white54:Colors.white,
+                        elevation: 2,
+                        child: InkWell(
+                          onTap: () {},
+                          child: ExpansionTile(
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 5),
+                                  child: Expanded(
+                                    child: Text(
+                                      null!=document.centre?document.centre+","+document.city+" ":document.city+" ",
+                                      style: GoogleFonts.lato(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                child: Text(
-                             
-                                          null!=document.date?document.date:'' + ' '+ document.time,
-                                
-                                  style: GoogleFonts.lato(
-                                      color: Colors.green,
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold),
+                                Expanded(
+                                  child: Text(
+
+                                            null!=document.date?" "+document.date:'' + ' '+ document.time,
+
+                                    style: GoogleFonts.lato(
+                                        color: Colors.black,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 0,
+                                ),
+                                IconButton(
+                                  splashRadius: 20,
+                                  icon: Icon(Icons.share),
+                                  onPressed: () {
+                                    var data = 'Name -';
+                                    Share.share(data);
+                                    dbRef..child("doctorappointments").child(document.date).child(document.key).update(
+                                      {
+                                        "shared":'true'
+                                      }
+                                    );
+
+                                  },
+                                ),
+                              ],
+                            ),
+                            subtitle: Padding(
+                              padding: const EdgeInsets.only(left: 5),
+                              child: Text(
+
+                                    document.service,
+                                style: GoogleFonts.lato(
+                                  color: Colors.black
                                 ),
                               ),
-                              SizedBox(
-                                width: 0,
+                            ),
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    bottom: 20, right: 10, left: 16),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          " Patient name: " + document.patientName,
+                                          style: GoogleFonts.lato(
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                                    TextButton(
+                                  onPressed: () =>{
+                                      _launchCaller("tel:" + document.mobile)
+                                  },
+                                  child: Text('Mobile: '+
+                                    document.mobile,
+                                    style: GoogleFonts.lato(
+                                        fontSize: 16, color: Colors.black),
+                                  ),
+                                ),
+                                        // Text(
+                                        //   "Mobile: " +
+
+                                        //         document.mobile,
+
+
+                                        //   style: GoogleFonts.lato(
+                                        //     fontSize: 16,
+                                        //   ),
+                                        // ),
+                                      ],
+                                    ),
+                                    IconButton(
+                                      tooltip: 'Delete Appointment',
+                                      icon: Icon(
+                                        Icons.delete,
+                                        color: Colors.black87,
+                                      ),
+                                      onPressed: () {
+                                        print(">>>>>>>>>" + document.id);
+                                        // var _documentID = document.id;
+                                        showAlertDialog(context);
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
-                          subtitle: Padding(
-                            padding: const EdgeInsets.only(left: 5),
-                            child: Text(
-                             
-                                  document.service,
-                              style: GoogleFonts.lato(),
-                            ),
-                          ),
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  bottom: 20, right: 10, left: 16),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Patient name: " + document.patientName,
-                                        style: GoogleFonts.lato(
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                                  TextButton(
-                                onPressed: () =>{
-                                    _launchCaller("tel:" + document.mobile)
-                                },
-                                child: Text('Mobile: '+
-                                  document.mobile,
-                                  style: GoogleFonts.lato(
-                                      fontSize: 16, color: Colors.blue),
-                                ),
-                              ),
-                                      // Text(
-                                      //   "Mobile: " +
-                                            
-                                      //         document.mobile,
-                                                  
-                                                 
-                                      //   style: GoogleFonts.lato(
-                                      //     fontSize: 16,
-                                      //   ),
-                                      // ),
-                                    ],
-                                  ),
-                                  IconButton(
-                                    tooltip: 'Delete Appointment',
-                                    icon: Icon(
-                                      Icons.delete,
-                                      color: Colors.black87,
-                                    ),
-                                    onPressed: () {
-                                      print(">>>>>>>>>" + document.id);
-                                      // var _documentID = document.id;
-                                      showAlertDialog(context);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
                         ),
-                      ),
-                    );
-                  },
-                ),
+                      );
+                    },
+                  ),
+              ),
       );
 
   }

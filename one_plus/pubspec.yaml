@@ -49,6 +49,7 @@ dependencies:
   url_launcher: ^6.0.8
   firebase_database: ^7.2.1
   flutter_local_notifications: ^5.0.0+4
+  share_plus: ^2.1.4
  
 
  

@@ -8,8 +8,10 @@ String id;
 String time;
 String city;
 String mobile;
+String key;
+String shared;
 
-AppointmentData( {required this.patientName,required this.description,required this.date,required this.centre,required this.service,required this.id,required this.time,required this.city,required this.mobile});
+AppointmentData( {required this.patientName,required this.description,required this.shared,required this.date,required this.centre,required this.service,required this.id,required this.time,required this.city,required this.mobile,required this.key});
 
 
 }

@@ -75,6 +75,7 @@ class _BookingScreenState extends State<BookingScreen> {
 
   }
   createAppointment()  {
+  String key = DateTime.now().millisecondsSinceEpoch.toString();
     print("started");
     Map <String,String> appointmentData = {
       "centre":selectedCenter,
@@ -84,10 +85,12 @@ class _BookingScreenState extends State<BookingScreen> {
       "mobile":_phoneController.text,
       "patientName":_nameController.text,
       "service":selectedService,
-      "time":_timeController.text
+      "time":_timeController.text,
+      "key":key,
+      "shared":'false'
     };
-    ref.child("appointments").child(_userId).child(_dateController.text).child(DateTime.now().millisecondsSinceEpoch.toString()).set(appointmentData);
-    ref.child("doctorappointments").child(_dateController.text).child(DateTime.now().millisecondsSinceEpoch.toString()).set(appointmentData);
+    ref.child("appointments").child(_userId).child(_dateController.text).child(key).set(appointmentData);
+    ref.child("doctorappointments").child(_dateController.text).child(key).set(appointmentData);
 }
 
 
@@ -142,12 +145,8 @@ class _BookingScreenState extends State<BookingScreen> {
         style: GoogleFonts.lato(fontWeight: FontWeight.bold),
       ),
       onPressed: () {
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => MyAppointments(),
-        //   ),
-        // );
+        Navigator.pop(context);
+        Navigator.pop(context);
       },
     );
 
