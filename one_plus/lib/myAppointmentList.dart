@@ -210,7 +210,7 @@ print('in widget ');
                                   splashRadius: 20,
                                   icon: Icon(Icons.share),
                                   onPressed: () {
-                                    var data = 'Name -';
+                                    var data = document as String;
                                     Share.share(data);
                                     dbRef..child("doctorappointments").child(document.date).child(document.key).update(
                                       {
