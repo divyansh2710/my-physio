@@ -1,6 +1,7 @@
 
 import 'dart:ui';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/painting.dart';
 
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ import 'package:my_physio/carouselSlider.dart';
 // import 'package:my_physio/models/centres.dart';
 import 'package:my_physio/tabs_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/link.dart';
 
 import 'auth_screen.dart';
 
@@ -133,7 +135,7 @@ class _HomePageState extends State<HomePage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [ SizedBox(
-              width: 100,
+              width: 60,
             ),
               Center(
                 child: Container(
@@ -149,7 +151,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               SizedBox(
-                width: 55,
+                width: 30,
               ),
               IconButton(
                 splashRadius: 20,
@@ -203,7 +205,7 @@ class _HomePageState extends State<HomePage> {
                     alignment: Alignment.centerLeft,
                     padding: EdgeInsets.only(left: 20, bottom: 10),
                     child: Text(
-                      "Hello " + 'Divyansh',
+                      "Hello " ,
                       style: GoogleFonts.lato(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
@@ -332,7 +334,39 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   CentreItem(centresData)
-                      ])
+                      ]),
+                  SizedBox(height: 20.0 ),
+                  Row(
+                    children: [
+
+                      SizedBox(width: 55),
+                      Link(uri: Uri.parse("https://myphysioindia.in/"),
+                        target: LinkTarget.self,
+                        builder: (context,followLink){
+                      return GestureDetector(
+
+                          child: Image(height: 40,width: 40,
+                              image: AssetImage("assets/globe.png")),
+                          onTap: followLink);
+                        }),SizedBox(width: 40),
+                      Link(uri: Uri.parse("https://www.facebook.com/myphysiophysiotherapyclinic/"),
+                          target: LinkTarget.self,
+                          builder: (context,followLink){
+                            return GestureDetector(
+                                child: Image(height: 50,width: 50,image: AssetImage("assets/fb.png")),
+                                onTap: followLink);
+                          }),
+                      SizedBox(width: 40),
+                      Link(uri: Uri.parse("https://instagram.com/myphysioindia?utm_medium=copy_link"),
+                          target: LinkTarget.self,
+                          builder: (context,followLink){
+                            return GestureDetector(
+                                child: Image(height: 60,width: 60,
+                                    image: AssetImage("assets/insta.png")),
+                                onTap: followLink);
+                          })
+                    ],
+                  )
                 ],
               ),
             ],

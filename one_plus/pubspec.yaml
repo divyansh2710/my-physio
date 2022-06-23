@@ -46,10 +46,11 @@ dependencies:
   http: ^0.13.3
   firebase_messaging: ^10.0.2
   shared_preferences: ^2.0.6
-  url_launcher: ^6.0.8
   firebase_database: ^7.2.1
   flutter_local_notifications: ^5.0.0+4
   share_plus: ^2.1.4
+  share: 2.0.1
+  url_launcher: ^6.0.17
  
 
  

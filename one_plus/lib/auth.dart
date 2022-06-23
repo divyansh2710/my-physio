@@ -34,6 +34,8 @@ class Auth with ChangeNotifier {
   Future<void> _authenticate(
       String email, String password, String urlSegment) async {
     var url;
+    print(urlSegment);
+    print('1111111111');
     if (urlSegment == 'signup') {
       url = Uri.parse(
           '${UrlConstants.FIREBASE_BASE_URL}${UrlConstants.FIREBASE_SIGNUP}${UrlConstants.FIREBASE_KEY}');
@@ -78,6 +80,7 @@ class Auth with ChangeNotifier {
         },
       );
       prefs.setString('userData', userData);
+      print("setting user data");
     } catch (error) {
       throw error;
     }

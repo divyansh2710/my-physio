@@ -42,9 +42,11 @@ class _MyAppointmentsState extends State<MyAppointments> {
         ),
         iconTheme: IconThemeData(color: Colors.black),
       ),
-      body: Container(
-        padding: EdgeInsets.only(right: 10, left: 10, top: 10),
-        child: MyAppointmentList(),
+      body: SafeArea(
+        child: Container(
+          padding: EdgeInsets.only(right: 10, left: 10, top: 10),
+          child: MyAppointmentList(),
+        ),
       ),
     );
   }

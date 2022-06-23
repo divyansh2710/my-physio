@@ -1,9 +1,8 @@
-import 'dart:math';
-
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:my_physio/auth.dart';
 import 'package:my_physio/homePage.dart';
 import 'package:my_physio/models/http_exception.dart';
@@ -18,25 +17,29 @@ class AuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final deviceSize = MediaQuery.of(context).size;
+    final deviceSize = MediaQuery
+        .of(context)
+        .size;
     // final transformConfig = Matrix4.rotationZ(-8 * pi / 180);
     // transformConfig.translate(-10.0);
     return Scaffold(
-      resizeToAvoidBottomInset :false,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        title: Text('My Physio',style: TextStyle(color:Colors.black)
-      )),
+          backgroundColor: Theme
+              .of(context)
+              .primaryColor,
+          title: Text('My Physio', style: TextStyle(color: Colors.black)
+          )),
       // resizeToAvoidBottomInset: false,
-      body: 
-      
+      body:
+
       Container(
 
-            decoration: BoxDecoration(
-              image: DecorationImage(
-            image: AssetImage("assets/myphysio.PNG"),
-            fit: BoxFit.cover)
-            ),
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/myphysio.PNG"),
+                fit: BoxFit.cover)
+        ),
 
         child: Stack(
           children: <Widget>[
@@ -44,13 +47,13 @@ class AuthScreen extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
 //              image: DecorationImage(
-  //          image: AssetImage("assets/myphysio.PNG"),
-    //        fit: BoxFit.fitWidth),
+                //          image: AssetImage("assets/myphysio.PNG"),
+                //        fit: BoxFit.fitWidth),
                 gradient: LinearGradient(
                   colors: [
-                  
-                    Color.fromRGBO(30,157,252,0),
-                    Color.fromRGBO(30,107,252,0),
+
+                    Color.fromRGBO(30, 157, 252, 0),
+                    Color.fromRGBO(30, 107, 252, 0),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -81,6 +84,8 @@ class AuthScreen extends StatelessWidget {
     );
   }
 }
+
+
 
 class AuthCard extends StatefulWidget {
   // const AuthCard({
@@ -134,7 +139,7 @@ class _AuthCardState extends State<AuthCard> {
     if (_authMode == AuthMode.Login) {
        setUserName(_emailController.text );
        await Provider.of<Auth>(context,listen:false).login(_authData['email'] as String, _authData['password'] as String);
-   
+
     } else {
     await Provider.of<Auth>(context,listen:false).signup(_authData['email'] as String, _authData['password'] as String);
 
@@ -322,7 +327,9 @@ class _AuthCardState extends State<AuthCard> {
    setUserRole (String role) async {
 final prefs =  await SharedPreferences.getInstance();
       prefs.setString('userRole', role);
-      
+
    }
 
 }
+
+

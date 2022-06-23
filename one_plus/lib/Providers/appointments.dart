@@ -14,8 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/http_exception.dart';
 class AppointmentsProvider with ChangeNotifier {
 
-  List<AppointmentData> _appointments = [
-  ];  
+  List<AppointmentData> _appointments = [];
 
     List<AppointmentData> get appointments {
     // if (_showFavoritesOnly) {
@@ -26,7 +25,10 @@ class AppointmentsProvider with ChangeNotifier {
   Future<void> fetchAndSetAppointments() async {
     print('inside service');
      final prefs = await SharedPreferences.getInstance();
+     print(prefs.get('userRole') );
+     print("yessssss");
      final extractedUserData = json.decode(prefs.getString('userData') as String);
+     print(extractedUserData);
      String role=prefs.getString('userRole') as String;
      print(role);
      String? _userId = extractedUserData['userId'] as String;
@@ -129,29 +131,7 @@ try {
       
       }
       else{
-      
-      // extractedData.forEach((appointmentsData) {
-      //   loadedAppointments.add(AppointmentData(
-      //     patientName: appointmentsData['patientName'],
-      //     description: appointmentsData['description'],
-      //     city: appointmentsData['city'],
-      //     centre: appointmentsData['center'],
-      //     date: appointmentsData['date'],
-      //     mobile: appointmentsData['mobile'],
-      //     service:   appointmentsData['service'],
-      //     time: appointmentsData['time'],
-      //     id: ''
-      //
-      //   ));
-      // });
-      //
         extractedData.forEach((key, value) {
-
-       print('aaaaaa');
-       print(value);
-        //  value.forEach((valueData){
-            print('ddd');
-           // print(valueData);
             loadedAppointments.add(AppointmentData(
                 patientName: value['patientName'],
                 description: value['description'],
@@ -226,13 +206,13 @@ final url3 = Uri.parse(UrlConstants.FIREBASE_API_URL+'/appointments/'+_userId+'.
         final Map<String, dynamic> data = json.decode(response.body);
       if (data == null||data.isEmpty) {
         print('c3');
-        
+
       }
       else{
 data.forEach((key, value) {
 
- 
-  value.forEach((valueData){
+
+  value.forEach((key,valueData){
 
  loadedAppointments.add(AppointmentData(
            patientName: valueData['patientName'],
@@ -246,7 +226,7 @@ data.forEach((key, value) {
            id: '',
      shared:value['shared'],
            key:value['key']
-          
+
          ));
   });
    });

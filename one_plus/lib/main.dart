@@ -8,7 +8,7 @@ import 'package:my_physio/Providers/appointments.dart';
 import 'package:flutter/src/services/binary_messenger.dart';
 import 'package:my_physio/Providers/centres.dart';
 import 'package:my_physio/Providers/doctors.dart';
-import 'package:my_physio/appointmentScreen.dart';
+//import 'package:my_physio/appointmentScreen.dart';
 import 'package:my_physio/auth.dart';
 import 'package:my_physio/auth_screen.dart';
 import 'package:my_physio/bookingScreen.dart';
@@ -122,6 +122,7 @@ class _MyAppState extends State<MyApp> {
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
+              debugShowCheckedModeBanner: false,
               title: 'MyPhysio',
 
               theme: ThemeData(
