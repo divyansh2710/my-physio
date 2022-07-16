@@ -23,6 +23,7 @@ import 'package:my_physio/carouselSlider.dart';
 import 'package:my_physio/tabs_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/link.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'auth_screen.dart';
 
@@ -85,6 +86,13 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    _launchCaller(String url) async {
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'Could not launch $url';
+      }
+    }
      final centresData = Provider.of<CentreProvider>(context,listen: false);
      final servicesData = Provider.of<ServicesProvider>(context,listen: false);
      final cityData = Provider.of<CityProvider>(context,listen:false);
@@ -366,7 +374,20 @@ class _HomePageState extends State<HomePage> {
                                 onTap: followLink);
                           })
                     ],
-                  )
+                  ),
+                  SizedBox(height: 10,),
+                  RaisedButton(
+                    child:
+                    Text("Contact Us"),
+                    onPressed:(){_launchCaller("tel:9782468066");} ,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    padding:
+                    EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
+                    color: Theme.of(context).primaryColor,
+                    textColor: Theme.of(context).primaryTextTheme.button!.color,
+                  ),
                 ],
               ),
             ],

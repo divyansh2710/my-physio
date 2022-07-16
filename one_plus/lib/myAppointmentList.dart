@@ -181,27 +181,23 @@ print('in widget ');
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(left: 5),
-                                  child: Expanded(
-                                    child: Text(
-                                      null!=document.centre?document.centre+","+document.city+" ":document.city+" ",
-                                      style: GoogleFonts.lato(
-                                        color: Colors.black,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                  child: Text(
+                                    null!=document.centre?document.centre+","+document.city+" ":document.city+" ",
+                                    style: GoogleFonts.lato(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
-                                Expanded(
-                                  child: Text(
+                                Text(
 
-                                            null!=document.date?" "+document.date:'' + ' '+ document.time,
+                                          null!=document.date?" "+document.date:'' + ' '+ document.time,
 
-                                    style: GoogleFonts.lato(
-                                        color: Colors.black,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold),
-                                  ),
+                                  style: GoogleFonts.lato(
+                                      color: Colors.black,
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
                                   width: 0,
@@ -210,7 +206,8 @@ print('in widget ');
                                   splashRadius: 20,
                                   icon: Icon(Icons.share),
                                   onPressed: () {
-                                    var data = document as String;
+                                    var data = document.patientName +'('+document.mobile+")";
+                                    print("share");
                                     Share.share(data);
                                     dbRef..child("doctorappointments").child(document.date).child(document.key).update(
                                       {

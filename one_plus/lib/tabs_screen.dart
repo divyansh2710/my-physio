@@ -4,7 +4,6 @@ import 'package:my_physio/Providers/centres.dart';
 import 'package:my_physio/Providers/Services.dart';
 import 'package:my_physio/Providers/city.dart';
 import 'package:my_physio/bookingScreen.dart';
-import 'package:my_physio/demoFile.dart';
 import 'package:my_physio/myAppointmentList.dart';
 import 'package:my_physio/services/databaseService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,7 +47,7 @@ _TabsScreenState(this.centreProvider,this.servicesProvider, this.cityProvider) {
   //    if (role=='Patient'){
   _pages=[
     {
-      'page': demoPage(),
+      'page': MyAppointmentList(),
       'title': 'My Appointments',
     },
     {
